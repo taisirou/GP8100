@@ -1,4 +1,4 @@
-# GP8101用ライブラリ
+# MultiGP8101用ライブラリ
 PWM　DACIC　GP8101用のArduinoライブラリです。
 
 # 元ライブラリ
