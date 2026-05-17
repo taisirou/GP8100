@@ -32,11 +32,14 @@ void GP8101::begin(uint8_t pin)
   _pin0 = pin;
   #if defined(ESP32)  
     ledcSetup(PWM_PASSAGG0, 5000, 13);  ////分辨率为12位，即占空比可选0~8191
+	ledcSetup(PWM_PASSAGG1, 5000, 13);  ////分辨率为12位，即占空比可选0~8191
 	ledcAttachPin(_pin0, PWM_PASSAGG0);
+	ledcAttachPin(_pin1, PWM_PASSAGG0);
   #elif defined(ESP8266) 
     analogWriteRange(8191);
   #else 
-    pinMode(_pin,OUTPUT);
+    pinMode(_pin0,OUTPUT);
+	pinMode(_pin1,OUTPUT);
   #endif
 }
 void GP8101::begin(uint8_t pin0,uint8_t pin1)
@@ -44,14 +47,15 @@ void GP8101::begin(uint8_t pin0,uint8_t pin1)
   _pin0 = pin0;
   _pin1 = pin1;
   #if defined(ESP32)  
-  ledcSetup(PWM_PASSAGG0, 5000, 13);  ////分辨率为13位，即占空比可选0~8191
+  	ledcSetup(PWM_PASSAGG0, 5000, 13);  ////分辨率为13位，即占空比可选0~8191
 	ledcSetup(PWM_PASSAGG1, 5000, 13);
 	ledcAttachPin(_pin0, PWM_PASSAGG0);
 	ledcAttachPin(_pin1, PWM_PASSAGG1);
   #elif defined(ESP8266) 
     analogWriteRange(8191);
   #else 
-    pinMode(_pin,OUTPUT);
+    pinMode(_pin0,OUTPUT);
+	pinMode(_pin1,OUTPUT);
   #endif
 }
 void GP8101::setDACOutRange(eOutPutRange_t range)
@@ -92,7 +96,8 @@ void GP8101::sendData(uint16_t data, uint8_t channel)
     }
   #else 
     if(channel == 0){
-      analogWrite(_pin0, data);
+    	analogWrite(_pin0, data);
+		analogWrite(_pin1, data);
     }else if(channel == 1){
       analogWrite(_pin1, data);
     }else{
